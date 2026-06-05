@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import httpx
 
@@ -10,7 +10,6 @@ class OJSError(Exception):
 
 
 def clean_text(value: Any) -> str:
-    """Normalize OJS multilingual fields and remove embedded HTML comments."""
     if value is None:
         return ""
     if isinstance(value, dict):
@@ -39,8 +38,10 @@ class OJSClient:
 
     def _headers(self) -> Dict[str, str]:
         headers = {"Accept": "application/json"}
-        if self.token and self.token.lower() not in ["none", "null", "disabled", "false"]:
-    headers["Authorization"] = f"Bearer {self.token}"
+        disabled_values = {"none", "null", "disabled", "false", ""}
+        if self.token and self.token.strip().lower() not in disabled_values:
+            headers["Authorization"] = f"Bearer {self.token}"
+        return headers
 
     async def get(self, path: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         url = f"{self.base_url}/{path.lstrip('/')}"
