@@ -45,11 +45,11 @@ async def health() -> Dict[str, str]:
 @app.get("/ojs/health", dependencies=[Depends(require_api_key)])
 async def ojs_health(ojs: OJSClient = Depends(client)) -> Dict[str, Any]:
     try:
-        data = await ojs.get("contexts")
+        data = await ojs.list_submissions(count=1, offset=0)
         return {
             "status": "ok",
             "ojs_base_url": ojs.base_url,
-            "contexts_found": data.get("itemsMax"),
+            "submissions_found": data.get("itemsMax"),
         }
     except OJSError as exc:
         raise HTTPException(status_code=502, detail=str(exc))
