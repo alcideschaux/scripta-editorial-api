@@ -37,11 +37,7 @@ class OJSClient:
         self.timeout = float(os.environ.get("REQUEST_TIMEOUT_SECONDS", "30"))
 
     def _headers(self) -> Dict[str, str]:
-        headers = {"Accept": "application/json"}
-        disabled_values = {"none", "null", "disabled", "false", ""}
-        if self.token and self.token.strip().lower() not in disabled_values:
-            headers["Authorization"] = f"Bearer {self.token}"
-        return headers
+        return {"Accept": "application/json"}
 
     async def get(self, path: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         url = f"{self.base_url}/{path.lstrip('/')}"
