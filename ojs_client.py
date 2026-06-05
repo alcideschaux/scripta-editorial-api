@@ -39,9 +39,8 @@ class OJSClient:
 
     def _headers(self) -> Dict[str, str]:
         headers = {"Accept": "application/json"}
-        if self.token:
-            headers["Authorization"] = f"Bearer {self.token}"
-        return headers
+        if self.token and self.token.lower() not in ["none", "null", "disabled", "false"]:
+    headers["Authorization"] = f"Bearer {self.token}"
 
     async def get(self, path: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         url = f"{self.base_url}/{path.lstrip('/')}"
