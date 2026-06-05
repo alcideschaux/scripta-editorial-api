@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: scripta-editorial-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OJS_BASE_URL
+        value: https://scriptascientia.com/sasc/api/v1
+      - key: OJS_API_TOKEN
+        sync: false
+      - key: EDITORIAL_API_KEY
+        sync: false
+      - key: REQUEST_TIMEOUT_SECONDS
+        value: "30"
